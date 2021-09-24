@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="rsp.css">
+	<title>rsp Game</title>
+</head>
+<body>
+
+	<h1>ROCK PAPER SCISSER GAME </h1>
+	<div class='container'>
+		<div class='flex-box-container' id='flex-box'>
+			<img id='paper' src='paper.jpg' onclick="rspgame(this)">
+			<img id='rock'src='rock.jpg' onclick="rspgame(this)">
+			<img id='scissor' src='scissor.jpg' onclick="rspgame(this)">
+			
+		</div>
+	</div>
+</body>
+</html>
+
+<script>
+
+	//main function
+	function rspgame(user)
+	{
+		let humanchoice , computerchoice
+		humanchoice = user.id
+
+		computerchoice = getrsp()
+		
+		var winner = decidethewinner(humanchoice , computerchoice)
+		
+		var winnerofGame = winnerOfGame(winner)
+
+		var frontend = frontEnd(humanchoice , computerchoice , winnerofGame)
+		console.log(humanchoice , computerchoice)
+		console.log(winner)
+		console.log(winnerofGame)
+
+
+	}
+
+	//computer random selection
+	function getrsp()
+	{
+		var lst = ['rock','paper','scissor']
+		var number = Math.floor(Math.random() * 3)
+		return lst[number]
+	}
+
+	//decided the winner 
+	function decidethewinner(human , computer)
+	{
+		var rsp = {
+			'rock' :{'rock':0.5 , 'paper':0,'scissor':1} , 
+			'paper' : {'rock':1, 'paper':0.5 ,'scissor':0} ,
+			'scissor' : {'rock' : 0 , 'paper':1 , 'scissor':0.5}
+		}
+
+		var humanchoice = rsp[human][computer]
+		var computerchoice = rsp[computer][human]
+		return [humanchoice , computerchoice] 
+	}
+
+
+	//message whos winner the game
+	function winnerOfGame([yourscore , computerscore])
+	{
+		if (yourscore === 0)
+		{
+			return {'message':'YOU LOST !' ,'color':'red'}
+		} 
+		else if(yourscore === 0.5)
+		{
+			return {'message':'YOU TIED','color':'yellow'}
+		}
+		else{
+			return {'message':'YOU WON !!!','color':'green'}
+		}
+	}
+
+
+	//frontend how to show 
+	function frontEnd(yourchoice , botchoice , message){
+		let imgdatabase = {
+			'rock':document.getElementById('rock').src ,
+			'paper' : document.getElementById('paper').src ,
+			'scissor' : document.getElementById('scissor').src
+		}
+
+		document.getElementById('rock').remove()
+		document.getElementById('paper').remove()
+		document.getElementById('scissor').remove()
+
+		var humandiv = document.createElement('div')
+		var botdiv = document.createElement('div')
+		var msgdiv = document.createElement('div')
+
+		humandiv.innerHTML = '<img style= "box-shadow:0px 5px 20px blue;" src="'+ imgdatabase[yourchoice] +'" >'
+		msgdiv.innerHTML = "<h1 style = 'color:" + message['color'] + ";font-size:60px;'>" + message['message'] + "</h1>"
+		botdiv.innerHTML = '<img  style= "box-shadow:0px 5px 20px blue;"  src="'+ imgdatabase[botchoice] +'">'
+
+		var box = document.getElementById('flex-box')
+		box.appendChild(humandiv)
+		box.appendChild(msgdiv)
+		box.appendChild(botdiv)
+	}
+</script>
